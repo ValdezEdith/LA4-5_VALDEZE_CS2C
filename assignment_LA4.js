@@ -1,39 +1,46 @@
-// a simple Queueing System
+// Initialize the queue as an empty array
+let queue = [];
 
-class Queue {
-    constructor() {
-        this.items = [];
-    }
-    enqueue(customer) {
-        this.items.push(customer);
-        return this.items.length; //lets Queue number
-    }
-    dequeue(num) { //lets remove by number
-        if (num >= 1 && num <= this.items.length) {
-            return this.items.splice(num - 1, 1)[0]; //Remove and return
-        }
-        return null; //Its invalid number
-    }
-    display() {
-        console.log(this.items.map((c, i) => `${i + 1}. ${c}`).join('\n'));
+// Function to add a customer to the queue
+function addCustomer(name) {
+    queue.push(name);  // Add the customer's name to the queue
+    console.log(`Customer ${name} added to the queue.`);  // Log the addition
+    console.log("Updated Queue: ", queue);  // Display the updated queue
+}
+
+// Function to service a customer
+function serviceCustomer() {
+    let number = prompt("Enter the customer number to be serviced (1-5):");  // Ask for customer number
+    let index = number - 1;  // Convert to 0-based index
+
+    // Check if the entered number is valid
+    if (index >= 0 && index < queue.length) {
+        // Service the customer and remove them from the queue
+        let customerName = queue.splice(index, 1)[0];  // Remove and get the customer name
+        alert(`Serving customer: ${customerName}`);  // Alert the customer being serviced
+        console.log("Updated Queue: ", queue);  // Display the updated queue after service
+    } else {
+        alert("Invalid customer number! Please enter a number between 1 and 5.");  // If number is invalid
     }
 }
 
-const q = new Queue();
-["Elaine", "Althea", "Angelo", "Lito", "Engelbert"].forEach(c => q.enqueue(c));
+// Main program execution
+function runQueueSystem() {
+    // Ask for customers' names and add them to the queue
+    let customers = ["Elaine", "Althea", "Angelo", "Lito", "Engelbert"];
+    for (let i = 0; i < customers.length; i++) {
+        let name = prompt(`Enter the name for customer ${i + 1}:`);  // Ask for customer's name
+        addCustomer(name);  // Add the customer's name to the queue
+    }
 
-while (q.items.length > 0) {
-    q.display();
-    let num = parseInt(prompt(`Serve customer number (1-${q.items.length}) or type 'done':`));
-    if (isNaN(num) || num < 1 || num > q.items.length) {
-      if(prompt("Enter valid number to serve or 'done':").toLowerCase() === 'done'){
-        break;
-      }
-      continue;
+    // Service customers one by one
+    for (let i = 0; i < customers.length; i++) {
+        serviceCustomer();  // Service the next customer
     }
-    let served = q.dequeue(num);
-    if(served){
-        console.log(`Served: ${served}`);
-    }
+
+    // Final state of the queue (should be empty if all customers are serviced)
+    console.log("Final Queue: ", queue);
 }
-console.log("Queue is empty.");
+
+// Start the Queueing System
+runQueueSystem();
